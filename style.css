@@ -1,0 +1,132 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f6f9f7;
+    margin: 0;
+    padding: 0;
+    color: #2d3e33;
+  }
+  
+  .header {
+    background: #3b553e;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+  
+  .logo-area {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 70px;
+    width: 70px;
+    border-radius: 30%;
+    margin-right: 10px;
+    object-fit: cover;
+  }
+  
+  .header-text h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+  
+  .header-text p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 100px auto 50px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #3b553e;
+    margin-bottom: 20px;
+  }
+  
+  .patient-info {
+    background: #f9fbf9;
+    padding: 20px;
+    border: 1px solid #d6e0d8;
+    border-radius: 10px;
+    margin-bottom: 25px;
+  }
+  
+  .patient-info input {
+    margin: 8px 10px 8px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 45%;
+  }
+  
+  .meal {
+    margin-bottom: 25px;
+    background: #f9fbf9;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #d6e0d8;
+  }
+  
+  .meal h3 {
+    color: #3b553e;
+    margin-bottom: 10px;
+  }
+  
+  .items input {
+    margin: 5px 8px 5px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 45%;
+  }
+  
+  .add-item {
+    background: #3b553e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  
+  .add-item:hover {
+    background: #496e4c;
+  }
+  
+  #generate-pdf {
+    display: block;
+    margin: 30px auto;
+    background: #2d3e33;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+  
+  #generate-pdf:hover {
+    background: #3b553e;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 15px;
+    background: #3b553e;
+    color: white;
+    font-size: 14px;
+  }
+  

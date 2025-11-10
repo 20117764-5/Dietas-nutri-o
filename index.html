@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano Alimentar - Dra. Sandrely Vitória</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo-area">
+      <img src="assets/LOGO.png" alt="Logo Nutricionista" class="logo">
+      <div class="header-text">
+        <h1>Dra. Sandrely Vitória</h1>
+        <p>CRN6-46711/P</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Plano Alimentar</h2>
+
+    <section class="patient-info">
+      <h3>Informações do Paciente</h3>
+      <input type="text" id="paciente-nome" placeholder="Nome do paciente">
+      <input type="text" id="paciente-idade" placeholder="Idade">
+      <input type="text" id="paciente-objetivo" placeholder="Objetivo (ex: emagrecimento, hipertrofia)">
+      <input type="date" id="data-consulta">
+    </section>
+
+    <div id="meals-container">
+      <div class="meal">
+        <h3>Café da Manhã</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+
+      <div class="meal">
+        <h3>Lanche da Manhã</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+
+      <div class="meal">
+        <h3>Almoço</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+
+      <div class="meal">
+        <h3>Lanche da Tarde</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+
+      <div class="meal">
+        <h3>Jantar</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+
+      <div class="meal">
+        <h3>Ceia</h3>
+        <div class="items"></div>
+        <button class="add-item">+ Adicionar alimento</button>
+      </div>
+    </div>
+
+    <button id="generate-pdf">Gerar PDF</button>
+  </main>
+
+  <footer>
+    <p>© 2025 Dra. Sandrely Vitória | Nutricionista CRN6-46711/P</p>
+  </footer>
+
+  <!-- Importa jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
