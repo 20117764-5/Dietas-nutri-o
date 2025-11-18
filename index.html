@@ -3,78 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plano Alimentar - Dra. Sandrely Vitória</title>
+  <title>Criador de Dietas • Dra. Sandrely Vitória</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="logo-area">
-      <img src="Assets/LOGO.png" alt="Logo Nutricionista" class="logo">
-      <div class="header-text">
-        <h1>Dra. Sandrely Vitória</h1>
-        <p>CRN6-46711/P</p>
+
+  <div class="app-wrapper">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="Assets/LOGO.png" alt="Logo" class="logo" id="logoImage" crossorigin="anonymous">
+        <div>
+          <h1>Dra. Sandrely</h1>
+          <span>Painel do Nutricionista</span>
+        </div>
       </div>
-    </div>
-  </header>
+      <p class="sidebar-info">Preencha os dados abaixo para gerar o PDF personalizado do paciente.</p>
+      
+      <button id="generate-pdf" class="btn-generate">
+        <i class="fa-solid fa-file-pdf"></i> Gerar PDF da Dieta
+      </button>
+    </aside>
 
-  <main class="container">
-    <h2>Plano Alimentar</h2>
+    <main class="main-content">
+      
+      <section class="card patient-card">
+        <div class="card-header">
+          <i class="fa-solid fa-user-circle"></i>
+          <h2>Dados do Paciente</h2>
+        </div>
+        <div class="grid-inputs">
+          <div class="input-group">
+            <label>Nome Completo</label>
+            <input type="text" id="paciente-nome" placeholder="Ex: Maria da Silva">
+          </div>
+          <div class="input-group sm">
+            <label>Idade</label>
+            <input type="text" id="paciente-idade" placeholder="Ex: 32 anos">
+          </div>
+          <div class="input-group">
+            <label>Data da Consulta</label>
+            <input type="date" id="data-consulta">
+          </div>
+          <div class="input-group full">
+            <label>Objetivo do Plano</label>
+            <input type="text" id="paciente-objetivo" placeholder="Ex: Emagrecimento e Reeducação Alimentar">
+          </div>
+        </div>
+      </section>
 
-    <section class="patient-info">
-      <h3>Informações do Paciente</h3>
-      <input type="text" id="paciente-nome" placeholder="Nome do paciente">
-      <input type="text" id="paciente-idade" placeholder="Idade">
-      <input type="text" id="paciente-objetivo" placeholder="Objetivo (ex: emagrecimento, hipertrofia)">
-      <input type="date" id="data-consulta">
-    </section>
+      <div id="meals-container">
+        
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-mug-hot"></i>
+              <h3>Café da Manhã</h3>
+            </div>
+            <button class="btn-add" title="Adicionar Item"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
 
-    <div id="meals-container">
-      <div class="meal">
-        <h3>Café da Manhã</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-apple-whole"></i>
+              <h3>Lanche da Manhã</h3>
+            </div>
+            <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
+
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-utensils"></i>
+              <h3>Almoço</h3>
+            </div>
+            <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
+
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-coffee"></i>
+              <h3>Lanche da Tarde</h3>
+            </div>
+            <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
+
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-leaf"></i>
+              <h3>Jantar</h3>
+            </div>
+            <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
+
+        <div class="card meal-card">
+          <div class="card-header">
+            <div class="meal-title">
+              <i class="fa-solid fa-moon"></i>
+              <h3>Ceia</h3>
+            </div>
+            <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <div class="items-list"></div>
+        </div>
+
       </div>
+    </main>
+  </div>
 
-      <div class="meal">
-        <h3>Lanche da Manhã</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
-      </div>
-
-      <div class="meal">
-        <h3>Almoço</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
-      </div>
-
-      <div class="meal">
-        <h3>Lanche da Tarde</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
-      </div>
-
-      <div class="meal">
-        <h3>Jantar</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
-      </div>
-
-      <div class="meal">
-        <h3>Ceia</h3>
-        <div class="items"></div>
-        <button class="add-item">+ Adicionar alimento</button>
-      </div>
-    </div>
-
-    <button id="generate-pdf">Gerar PDF</button>
-  </main>
-
-  <footer>
-    <p>© 2025 Dra. Sandrely Vitória | Nutricionista CRN6-46711/P</p>
-  </footer>
-
-  <!-- Importa jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  
   <script src="script.js"></script>
 </body>
 </html>

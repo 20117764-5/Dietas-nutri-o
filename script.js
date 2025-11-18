@@ -1,148 +1,156 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // ======== FUNÇÃO PARA CRIAR NOVO ALIMENTO ========
-    function createMealItem(foodValue = "", qtyValue = "") {
+  const { jsPDF } = window.jspdf;
+
+  // --- Função para criar linha de alimento ---
+  function createMealItem(foodValue = "", qtyValue = "") {
       const itemDiv = document.createElement("div");
       itemDiv.className = "meal-item";
       itemDiv.innerHTML = `
-        <input class="food" type="text" placeholder="Alimento" value="${foodValue}">
-        <input class="quantity" type="text" placeholder="Quantidade" value="${qtyValue}">
+          <input class="food" type="text" placeholder="Ex: Pão integral com ovo" value="${foodValue}">
+          <input class="quantity" type="text" placeholder="Ex: 2 fatias" value="${qtyValue}">
+          <button class="btn-remove" title="Remover"><i class="fa-solid fa-trash"></i></button>
       `;
+
+      // Evento para remover o item
+      itemDiv.querySelector(".btn-remove").addEventListener("click", () => {
+          itemDiv.remove();
+      });
+
       return itemDiv;
-    }
-  
-    // inicializa as refeições
-    document.querySelectorAll(".meal").forEach(meal => {
-      const items = meal.querySelector(".items");
-      if (!items.querySelector(".meal-item")) {
-        items.appendChild(createMealItem());
-      }
-    });
-  
-    // evento dos botões "+ adicionar alimento"
-    document.querySelectorAll(".add-item").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const items = btn.previousElementSibling;
-        items.appendChild(createMealItem());
-      });
-    });
-  
-    // ======== GERAR PDF ========
-    document.getElementById("generate-pdf").addEventListener("click", async function () {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: "mm", format: "a4" });
-  
-      // === CONFIGURAÇÕES ===
-      const verdeMusgo = [51, 77, 61];
-      const verdeClaro = [232, 242, 235];
-      const margemEsq = 20;
-      let y = 20;
-  
-      // === LOGO E CABEÇALHO ===
-      try {
-        const logoEl = document.querySelector(".logo img");
-        if (logoEl) {
-          const canvas = document.createElement("canvas");
-          canvas.width = logoEl.width;
-          canvas.height = logoEl.height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(logoEl, 0, 0);
-          const logoBase64 = canvas.toDataURL("image/png");
-          doc.addImage(logoBase64, "PNG", margemEsq, y, 25, 25);
-        }
-      } catch {}
-  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.setTextColor(...verdeMusgo);
-      doc.text("Plano Alimentar", 55, y + 8);
-  
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "normal");
-      doc.text("Dra. Sandrely Vitória - Nutricionista", 55, y + 15);
-      doc.text("CRN6 - 46711/P", 55, y + 21);
-  
-      // Linha verde
-      y += 30;
-      doc.setDrawColor(...verdeMusgo);
-      doc.setLineWidth(0.8);
-      doc.line(margemEsq, y, 190, y);
-  
-      // === DADOS DO PACIENTE ===
-      y += 10;
-      doc.setFillColor(...verdeClaro);
-      doc.roundedRect(margemEsq, y, 170, 30, 3, 3, "F");
-  
-      const nome = document.getElementById("nome")?.value || "";
-      const idade = document.getElementById("idade")?.value || "";
-      const objetivo = document.getElementById("objetivo")?.value || "";
-      const dataConsulta = document.getElementById("dataConsulta")?.value || "";
-  
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.setTextColor(...verdeMusgo);
-      doc.text("Dados do Paciente", margemEsq + 4, y + 7);
-  
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(0);
-      doc.text(`Nome: ${nome}`, margemEsq + 4, y + 14);
-      doc.text(`Idade: ${idade}`, margemEsq + 100, y + 14);
-      doc.text(`Objetivo: ${objetivo}`, margemEsq + 4, y + 21);
-      doc.text(`Data: ${dataConsulta}`, margemEsq + 100, y + 21);
-      y += 40;
-  
-      // === REFEIÇÕES ===
-      const meals = document.querySelectorAll(".meal");
-      meals.forEach(meal => {
-        const title = meal.querySelector("h3").textContent;
-        const items = meal.querySelectorAll(".meal-item");
-  
-        // Caixa de refeição
-        doc.setFillColor(...verdeClaro);
-        const startY = y;
-        let boxHeight = 15 + items.length * 6.5;
-        if (boxHeight < 25) boxHeight = 25;
-        doc.roundedRect(margemEsq, y, 170, boxHeight, 3, 3, "F");
-  
-        // Título
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(12);
-        doc.setTextColor(...verdeMusgo);
-        doc.text(title, margemEsq + 4, y + 8);
-  
-        // Cabeçalho da tabela
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(60);
-        doc.text("Alimento", margemEsq + 4, y + 14);
-        doc.text("Quantidade", 130, y + 14);
-  
-        // Itens
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(0);
-        let lineY = y + 20;
-        items.forEach(item => {
-          const food = item.querySelector(".food").value.trim();
-          const qty = item.querySelector(".quantity").value.trim();
-          if (food || qty) {
-            doc.text(food, margemEsq + 4, lineY);
-            doc.text(qty, 130, lineY);
-            lineY += 6;
-          }
-        });
-  
-        y += boxHeight + 8;
-        if (y > 260) {
-          doc.addPage();
-          y = 20;
-        }
-      });
-  
-      // === RODAPÉ ===
-      doc.setFontSize(9);
-      doc.setTextColor(130);
-      doc.text("© Dra. Sandrely Vitória - Nutricionista CRN6-46711/P", margemEsq, 285);
-  
-      doc.save(`Plano_Alimentar_${nome || "Paciente"}.pdf`);
-    });
+  }
+
+  // --- Inicializa com 1 item vazio em cada refeição ---
+  document.querySelectorAll(".items-list").forEach(list => {
+      list.appendChild(createMealItem());
   });
-  
+
+  // --- Botões de Adicionar (+) ---
+  document.querySelectorAll(".btn-add").forEach(btn => {
+      btn.addEventListener("click", () => {
+          // Encontra a div 'items-list' dentro do mesmo card
+          const card = btn.closest(".card");
+          const list = card.querySelector(".items-list");
+          list.appendChild(createMealItem());
+      });
+  });
+
+  // --- GERAÇÃO DO PDF ---
+  document.getElementById("generate-pdf").addEventListener("click", async function () {
+      const doc = new jsPDF();
+      
+      // Cores da marca
+      const primaryColor = [46, 168, 106]; // Verde Claro
+      const secondaryColor = [107, 142, 35]; // Verde Musgo
+      const darkColor = [18, 56, 26]; // Verde Escuro
+
+      // 1. Header com Logo
+      try {
+          const logoImg = document.getElementById('logoImage');
+          // Cria um canvas para converter a imagem em base64 se necessário, 
+          // ou usa addImage direto se a imagem estiver carregada localmente.
+          // Aqui assumimos que Assets/LOGO.png carrega corretamente.
+          doc.addImage(logoImg, 'PNG', 15, 10, 25, 25);
+      } catch (e) {
+          console.log("Erro ao carregar logo", e);
+      }
+
+      // Texto do Header
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.setTextColor(...secondaryColor);
+      doc.text("Plano Alimentar Personalizado", 45, 20);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 60);
+      doc.text("Dra. Sandrely Vitória - Nutricionista", 45, 27);
+      doc.setFontSize(10);
+      doc.text("CRN6 - 46711/P", 45, 32);
+
+      doc.setDrawColor(...secondaryColor);
+      doc.setLineWidth(0.5);
+      doc.line(15, 40, 195, 40);
+
+      // 2. Informações do Paciente
+      const nome = document.getElementById("paciente-nome").value || "---";
+      const idade = document.getElementById("paciente-idade").value || "---";
+      const data = document.getElementById("data-consulta").value || new Date().toLocaleDateString('pt-BR');
+      const objetivo = document.getElementById("paciente-objetivo").value || "---";
+
+      doc.autoTable({
+          startY: 45,
+          theme: 'plain',
+          styles: { fontSize: 11, cellPadding: 2 },
+          columnStyles: { 0: { fontStyle: 'bold', textColor: secondaryColor } },
+          body: [
+              ['Paciente:', nome, 'Idade:', idade],
+              ['Objetivo:', objetivo, 'Data:', data]
+          ],
+      });
+
+      let finalY = doc.lastAutoTable.finalY + 10;
+
+      // 3. Loop pelas refeições
+      const mealCards = document.querySelectorAll(".meal-card");
+
+      mealCards.forEach(card => {
+          const title = card.querySelector("h3").innerText;
+          const items = [];
+          
+          // Pega os inputs
+          card.querySelectorAll(".meal-item").forEach(item => {
+              const food = item.querySelector(".food").value;
+              const qty = item.querySelector(".quantity").value;
+              
+              if (food.trim() !== "") {
+                  items.push([food, qty]);
+              }
+          });
+
+          // Só gera a tabela se tiver itens na refeição
+          if (items.length > 0) {
+              
+              // Título da Refeição
+              doc.setFont("helvetica", "bold");
+              doc.setFontSize(13);
+              doc.setTextColor(...darkColor);
+              // Verifica se cabe na página
+              if (finalY > 270) { doc.addPage(); finalY = 20; }
+              
+              doc.text(title, 15, finalY);
+              finalY += 3;
+
+              // Tabela de Alimentos
+              doc.autoTable({
+                  startY: finalY,
+                  head: [['Alimento / Preparação', 'Quantidade / Medida Caseira']],
+                  body: items,
+                  theme: 'striped',
+                  headStyles: { fillColor: secondaryColor, textColor: [255,255,255], fontStyle: 'bold' },
+                  bodyStyles: { textColor: [50,50,50] },
+                  styles: { fontSize: 11, cellPadding: 4 },
+                  margin: { left: 15, right: 15 },
+                  columnStyles: { 
+                      0: { cellWidth: 120 },
+                      1: { cellWidth: 'auto' } 
+                  }
+              });
+
+              finalY = doc.lastAutoTable.finalY + 10;
+          }
+      });
+
+      // Rodapé
+      const pageCount = doc.internal.getNumberOfPages();
+      for(let i = 1; i <= pageCount; i++) {
+          doc.setPage(i);
+          doc.setFontSize(9);
+          doc.setTextColor(150);
+          doc.text('Dra. Sandrely Vitória • Nutrição com Amor', 105, 290, { align: 'center' });
+      }
+
+      // Salvar
+      const fileName = `Dieta_${nome.replace(/ /g, "_")}.pdf`;
+      doc.save(fileName);
+  });
+});
