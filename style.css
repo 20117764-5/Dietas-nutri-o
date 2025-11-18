@@ -166,10 +166,48 @@ input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px
 
 /* Mobile */
 @media (max-width: 900px) {
-  .app-wrapper { flex-direction: column; height: auto; overflow: auto; }
-  .sidebar { width: 100%; padding: 20px; flex-direction: row; align-items: center; justify-content: space-between; }
-  .sidebar-info { display: none; }
-  .main-content { overflow: visible; }
-  .grid-inputs { grid-template-columns: 1fr; }
-  .full { grid-column: span 1; }
+  /* Libera a rolagem geral da página no celular */
+  body {
+    height: auto; 
+    overflow: auto; /* ISSO AQUI CONSERTA A ROLAGEM */
+  }
+
+  .app-wrapper {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; /* Garante que fique no fluxo */
+  }
+
+  .sidebar-info {
+    display: none;
+  }
+
+  .main-content {
+    overflow: visible; /* Remove a barra de rolagem interna */
+    height: auto;
+    padding: 20px;
+  }
+
+  .grid-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: span 1;
+  }
+  
+  /* Ajuste para o botão não ficar gigante no mobile */
+  .btn-generate {
+    padding: 12px;
+    font-size: 14px;
+  }
 }
