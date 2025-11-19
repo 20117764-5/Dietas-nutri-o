@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4.0"> 
 </head>
 <body>
 
@@ -21,11 +21,16 @@
           <span>Painel do Nutricionista</span>
         </div>
       </div>
-      <p class="sidebar-info">Preencha os dados abaixo para gerar o PDF personalizado do paciente.</p>
+      <p class="sidebar-info">Preencha os dados para gerar o plano alimentar Personalizado.</p>
       
-      <button id="generate-pdf" class="btn-generate">
-        <i class="fa-solid fa-file-pdf"></i> Gerar PDF da Dieta
-      </button>
+      <div class="button-group">
+        <button id="generate-pdf" class="btn-generate pdf">
+          <i class="fa-solid fa-file-pdf"></i> Gerar PDF
+        </button>
+        <button id="generate-word" class="btn-generate docx">
+          <i class="fa-solid fa-file-word"></i> Gerar Word
+        </button>
+      </div>
     </aside>
 
     <main class="main-content">
@@ -56,67 +61,72 @@
       </section>
 
       <div id="meals-container">
-        
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Café da Manhã">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-mug-hot"></i>
               <h3>Café da Manhã</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 08:00)">
             </div>
             <button class="btn-add" title="Adicionar Item"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="items-list"></div>
         </div>
 
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Lanche da Manhã">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-apple-whole"></i>
               <h3>Lanche da Manhã</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 10:30)">
             </div>
             <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="items-list"></div>
         </div>
 
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Almoço">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-utensils"></i>
               <h3>Almoço</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 13:00)">
             </div>
             <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="items-list"></div>
         </div>
 
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Lanche da Tarde">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-coffee"></i>
               <h3>Lanche da Tarde</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 16:30)">
             </div>
             <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="items-list"></div>
         </div>
 
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Jantar">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-leaf"></i>
               <h3>Jantar</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 19:30)">
             </div>
             <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
           </div>
           <div class="items-list"></div>
         </div>
 
-        <div class="card meal-card">
+        <div class="card meal-card" data-meal="Ceia">
           <div class="card-header">
             <div class="meal-title">
               <i class="fa-solid fa-moon"></i>
               <h3>Ceia</h3>
+              <input type="text" class="meal-time" placeholder="Horário (Ex: 22:00)">
             </div>
             <button class="btn-add"><i class="fa-solid fa-plus"></i></button>
           </div>
@@ -124,12 +134,27 @@
         </div>
 
       </div>
+
+      <section class="card patient-card full">
+        <div class="card-header">
+          <i class="fa-solid fa-notes-medical"></i>
+          <h2>Orientações Nutricionais Gerais</h2>
+        </div>
+        <div class="input-group full">
+          <label>Instruções importantes para o paciente</label>
+          <textarea id="orientacoes-nutricionais" placeholder="Ex: Beber 2L de água por dia. Mastigar bem os alimentos..."></textarea>
+        </div>
+      </section>
+
     </main>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   
-  <script src="script.js"></script>
+  <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <script src="script.js?v=4.0"></script> 
 </body>
 </html>
