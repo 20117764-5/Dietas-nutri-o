@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
 
-    // Base64 da Logo (Opcional se usar servidor/GitHub Pages, mas bom ter para Word)
-    const logoBase64 = ""; // Cole seu código Base64 se quiser
+    // Base64 opcional
+    const logoBase64 = ""; 
 
-    // --- FUNÇÃO CRIAR ITEM (Com Textarea) ---
     function createMealItem(plate = "", qty = "", preparation = "", substitution = "") {
         const itemDiv = document.createElement("div");
         itemDiv.className = "meal-item";
@@ -20,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.querySelectorAll(".items-list").forEach(list => list.appendChild(createMealItem()));
-
     document.querySelectorAll(".btn-add").forEach(btn => {
         btn.addEventListener("click", () => {
             const list = btn.closest(".card").querySelector(".items-list");
@@ -29,18 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =================================================================
-    // 1. GERAÇÃO DO PDF
+    // 1. PDF
     // =================================================================
     document.getElementById("generate-pdf").addEventListener("click", async function () {
         const doc = new jsPDF('p', 'mm', 'a4');
         const secondaryColor = [107, 142, 35];
         const darkColor = [18, 56, 26];
 
-        // Header
         let headerY = 10;
-        if (logoBase64) {
-            doc.addImage(logoBase64, 'PNG', 15, headerY, 25, 25);
-        } else {
+        if (logoBase64) doc.addImage(logoBase64, 'PNG', 15, headerY, 25, 25);
+        else {
             const logoEl = document.getElementById('logoImage');
             if (logoEl && logoEl.naturalWidth > 0) doc.addImage(logoEl, 'PNG', 15, headerY, 25, 25);
         }
@@ -52,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         doc.setFontSize(10); doc.text("CRN6 - 46711/P", 45, headerY + 22);
         doc.setDrawColor(...secondaryColor); doc.line(15, 40, 195, 40);
 
-        // Dados Paciente
         const nome = document.getElementById("paciente-nome").value || "---";
         let dataValor = document.getElementById("data-consulta").value;
         if(dataValor) dataValor = dataValor.split('-').reverse().join('/');
@@ -70,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let finalY = doc.lastAutoTable.finalY + 10;
 
-        // Refeições
         document.querySelectorAll(".meal-card").forEach(card => {
             const mealTitle = card.getAttribute('data-meal');
             const mealTime = card.querySelector(".meal-time").value;
@@ -114,143 +108,106 @@ document.addEventListener("DOMContentLoaded", () => {
         // Orientações
         const orientacoes = document.getElementById("orientacoes-nutricionais").value.trim();
         if (orientacoes) {
-            if (finalY > 250) { doc.addPage(); finalY = 20; }
+            if (finalY > 240) { doc.addPage(); finalY = 20; }
             doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(...secondaryColor);
             doc.text("Orientações Nutricionais", 15, finalY);
             finalY += 7;
             doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(50);
-            doc.text(doc.splitTextToSize(orientacoes, 180), 15, finalY);
+            const splitText = doc.splitTextToSize(orientacoes, 180);
+            doc.text(splitText, 15, finalY);
+            // Atualiza finalY baseado na altura do texto das orientações
+            finalY += (splitText.length * 5) + 10;
         }
 
+        // Extra (NOVO)
+        const extra = document.getElementById("campo-extra").value.trim();
+        if (extra) {
+            if (finalY > 240) { doc.addPage(); finalY = 20; }
+            doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(...secondaryColor);
+            doc.text("Extra", 15, finalY);
+            finalY += 7;
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(50);
+            doc.text(doc.splitTextToSize(extra, 180), 15, finalY);
+        }
+
+        // Rodapé
+        const pageCount = doc.internal.getNumberOfPages();
+        for(let i = 1; i <= pageCount; i++) {
+            doc.setPage(i); doc.setFontSize(9); doc.setTextColor(150);
+            doc.text('Dra. Sandrely Vitória • Nutrição com Amor | CRN6-46711/P', 105, 290, { align: 'center' });
+        }
         doc.save(`Dieta_${nome}.pdf`);
     });
 
     // =================================================================
-    // 2. GERAÇÃO DO WORD (.DOCX)
+    // 2. WORD (.DOCX)
     // =================================================================
     document.getElementById("generate-word").addEventListener("click", function () {
-        const { Document, Packer, Paragraph, TextRun, Table, TableCell, TableRow, WidthType, HeadingLevel, BorderStyle } = docx;
-
-        // Cores e Estilos
+        const { Document, Packer, Paragraph, TextRun, Table, TableCell, TableRow, WidthType, HeadingLevel } = docx;
         const primaryColor = "2EA86A"; 
         
-        // 1. Criar Título e Header
         const children = [
-            new Paragraph({
-                text: "Plano Alimentar Personalizado",
-                heading: HeadingLevel.TITLE,
-                alignment: "center",
-                spacing: { after: 200 }
-            }),
-            new Paragraph({
-                children: [
-                    new TextRun({ text: "Dra. Sandrely Vitória - Nutricionista | CRN6-46711/P", bold: true, color: "666666" })
-                ],
-                alignment: "center",
-                spacing: { after: 400 }
-            })
+            new Paragraph({ text: "Plano Alimentar Personalizado", heading: HeadingLevel.TITLE, alignment: "center", spacing: { after: 200 } }),
+            new Paragraph({ children: [new TextRun({ text: "Dra. Sandrely Vitória - Nutricionista | CRN6-46711/P", bold: true, color: "666666" })], alignment: "center", spacing: { after: 400 } })
         ];
 
-        // 2. Dados do Paciente
         const nome = document.getElementById("paciente-nome").value || "---";
-        const idade = document.getElementById("paciente-idade").value || "---";
         let dataValor = document.getElementById("data-consulta").value;
         if(dataValor) dataValor = dataValor.split('-').reverse().join('/');
         else dataValor = new Date().toLocaleDateString('pt-BR');
-        const objetivo = document.getElementById("paciente-objetivo").value || "---";
 
         children.push(new Paragraph({
             children: [
                 new TextRun({ text: `Paciente: ${nome}`, bold: true, size: 24 }),
-                new TextRun({ text: `\nIdade: ${idade} | Data: ${dataValor}`, size: 24 }),
-                new TextRun({ text: `\nObjetivo: ${objetivo}`, size: 24 })
+                new TextRun({ text: `\nIdade: ${document.getElementById("paciente-idade").value} | Data: ${dataValor}`, size: 24 }),
+                new TextRun({ text: `\nObjetivo: ${document.getElementById("paciente-objetivo").value}`, size: 24 })
             ],
             spacing: { after: 400 }
         }));
 
-        // 3. Refeições
-        const mealCards = document.querySelectorAll(".meal-card");
-        mealCards.forEach(card => {
+        document.querySelectorAll(".meal-card").forEach(card => {
             const mealTitle = card.getAttribute('data-meal');
             const mealTime = card.querySelector(".meal-time").value;
-            
-            // Verifica se tem itens
             const items = [];
             card.querySelectorAll(".meal-item").forEach(item => {
                 const plate = item.querySelector(".plate").value.trim();
                 const qty = item.querySelector(".quantity").value.trim();
                 const prep = item.querySelector(".preparation").value.trim();
                 const sub = item.querySelector(".substitution").value.trim();
-                
-                if(plate || qty) {
-                    items.push({ plate, qty, prep, sub });
-                }
+                if(plate || qty) items.push({ plate, qty, prep, sub });
             });
 
             if(items.length > 0) {
-                // Título da Refeição
-                children.push(new Paragraph({
-                    children: [
-                        new TextRun({ 
-                            text: `${mealTitle} ${mealTime ? ' - ' + mealTime : ''}`, 
-                            bold: true, 
-                            size: 28, 
-                            color: primaryColor 
-                        })
-                    ],
-                    spacing: { before: 200, after: 100 }
-                }));
+                children.push(new Paragraph({ children: [new TextRun({ text: `${mealTitle} ${mealTime ? ' - ' + mealTime : ''}`, bold: true, size: 28, color: primaryColor })], spacing: { before: 200, after: 100 } }));
 
-                // Criar Tabela para a refeição
                 const tableRows = items.map(item => {
-                    // Texto da célula
                     let cellText = [new TextRun({ text: `${item.plate} (${item.qty})`, bold: true })];
                     if(item.prep) cellText.push(new TextRun({ text: `\nPreparo: ${item.prep}`, italics: true }));
                     if(item.sub) cellText.push(new TextRun({ text: `\nSubstituição: ${item.sub}` }));
 
                     return new TableRow({
-                        children: [
-                            new TableCell({
-                                children: [new Paragraph({ children: cellText })],
-                                width: { size: 100, type: WidthType.PERCENTAGE },
-                                padding: { top: 100, bottom: 100, left: 100, right: 100 }
-                            })
-                        ]
+                        children: [ new TableCell({ children: [new Paragraph({ children: cellText })], width: { size: 100, type: WidthType.PERCENTAGE }, padding: { top: 100, bottom: 100, left: 100, right: 100 } }) ]
                     });
                 });
-
-                const mealTable = new Table({
-                    rows: tableRows,
-                    width: { size: 100, type: WidthType.PERCENTAGE }
-                });
-
-                children.push(mealTable);
-                children.push(new Paragraph({ text: "" })); // Espaço vazio
+                children.push(new Table({ rows: tableRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
+                children.push(new Paragraph({ text: "" }));
             }
         });
 
-        // 4. Orientações
         const orientacoes = document.getElementById("orientacoes-nutricionais").value.trim();
         if (orientacoes) {
-            children.push(new Paragraph({
-                text: "Orientações Nutricionais Gerais",
-                heading: HeadingLevel.HEADING_2,
-                color: primaryColor,
-                spacing: { before: 400, after: 200 }
-            }));
+            children.push(new Paragraph({ text: "Orientações Nutricionais Gerais", heading: HeadingLevel.HEADING_2, color: primaryColor, spacing: { before: 400, after: 200 } }));
             children.push(new Paragraph({ text: orientacoes }));
         }
 
-        // 5. Gerar Arquivo
-        const doc = new Document({
-            sections: [{
-                properties: {},
-                children: children
-            }]
-        });
+        // Extra (NOVO)
+        const extra = document.getElementById("campo-extra").value.trim();
+        if (extra) {
+            children.push(new Paragraph({ text: "Extra", heading: HeadingLevel.HEADING_2, color: primaryColor, spacing: { before: 400, after: 200 } }));
+            children.push(new Paragraph({ text: extra }));
+        }
 
-        Packer.toBlob(doc).then(blob => {
-            saveAs(blob, `Dieta_${nome}.docx`);
-        });
+        const doc = new Document({ sections: [{ properties: {}, children: children }] });
+        Packer.toBlob(doc).then(blob => saveAs(blob, `Dieta_${nome}.docx`));
     });
 });

@@ -35,48 +35,32 @@ body {
 }
 
 .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
-.logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1); }
+.logo { }
 .brand h1 { font-size: 18px; font-weight: 700; }
 .brand span { font-size: 12px; opacity: 0.7; }
 
 .sidebar-info { font-size: 14px; opacity: 0.8; line-height: 1.6; margin-bottom: auto; }
 
-/* Botões Laterais */
 .button-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
 
 .btn-generate {
-  border: none;
-  padding: 16px;
-  border-radius: var(--radius);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: 0.3s;
-  width: 100%;
-  color: white;
+  border: none; padding: 16px; border-radius: var(--radius);
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; transition: 0.3s; width: 100%; color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.btn-generate.pdf { background: #E03545; } /* Vermelho */
-.btn-generate.docx { background: #2B579A; } /* Azul Word */
-
+.btn-generate.pdf { background: #E03545; }
+.btn-generate.docx { background: #2B579A; }
 .btn-generate:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
 /* Main Content */
 .main-content { flex: 1; padding: 40px; overflow-y: auto; }
 
-/* Cards */
 .card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(0,0,0,0.02);
+  background: var(--white); border-radius: var(--radius); padding: 25px;
+  margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.02);
 }
 
 .card-header {
@@ -88,7 +72,6 @@ body {
 }
 .card-header i { color: var(--primary); margin-right: 10px; font-size: 1.2rem; }
 
-/* Inputs */
 .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .full { grid-column: span 2; }
 .sm { width: 100%; }
@@ -104,7 +87,6 @@ input:focus, textarea:focus { border-color: var(--primary); outline: none; box-s
 
 textarea { min-height: 100px; }
 
-/* Refeições Header */
 .meal-title { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
 .meal-time { max-width: 150px; padding: 8px 10px; font-size: 13px; font-weight: 600; color: var(--primary-dark); border-color: #d6e9d8; background: #e8f5e9; }
 
@@ -115,7 +97,6 @@ textarea { min-height: 100px; }
 }
 .btn-add:hover { background: var(--primary); color: white; }
 
-/* GRID DOS ITENS (Verticalizado) */
 .items-list { display: flex; flex-direction: column; gap: 15px; }
 
 .meal-item {
@@ -146,7 +127,6 @@ textarea { min-height: 100px; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Mobile */
 @media (max-width: 900px) {
   body { height: auto; overflow: auto; }
   .app-wrapper { flex-direction: column; height: auto; overflow: visible; }
@@ -155,8 +135,6 @@ textarea { min-height: 100px; }
   .main-content { overflow: visible; height: auto; padding: 20px; }
   .grid-inputs { grid-template-columns: 1fr; }
   .full { grid-column: span 1; }
-  
-  /* Ajuste do Grid para Mobile */
   .meal-item {
       grid-template-areas: 
         "plate remove"
