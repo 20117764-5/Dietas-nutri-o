@@ -35,6 +35,16 @@ body {
 }
 
 .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+
+.logo { width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1);
+  
+  /* AQUI ESTÁ A MUDANÇA */
+  object-position: 50% 90%; }
+
 .brand h1 { font-size: 18px; font-weight: 700; }
 .brand span { font-size: 12px; opacity: 0.7; }
 
